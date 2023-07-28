@@ -1,18 +1,12 @@
-# Use the official Python base image
-FROM python:3.9-slim
+# Use an nginx base image to serve the static files
+FROM nginx:alpine
 
-# Set the working directory inside the container
-WORKDIR /app
+# Replace default nginx welcome page with "Hello, World!"
+RUN echo "Hello, World!" > /usr/share/nginx/html/index.html
 
-# Copy the required files into the container
-COPY app.py /app
-COPY requirements.txt /app
+# Expose port 80 to access the web server
+EXPOSE 80
 
-# Install the dependencies
-RUN pip install --no-cache-dir -r requirements.txt
+# Start nginx to serve the message
+CMD ["nginx", "-g", "daemon off;"]
 
-# Expose port 5000 for the Flask web server
-EXPOSE 5000
-
-# Start the web server when the container runs
-CMD ["python", "app.py"]
