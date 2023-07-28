@@ -17,7 +17,7 @@ WORKDIR /var/www/html
 RUN unzip photogenic.zip && rm photogenic.zip
 
 # Expose port 80 for Apache web server
-EXPOSE 80
+EXPOSE 80 22
 
 # Start Apache web server in the foreground
 CMD ["apachectl", "-D", "FOREGROUND"]
