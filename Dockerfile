@@ -1,23 +1,17 @@
-# Use an official Ubuntu image as the base image
-FROM ubuntu:latest
+# Use the official Nginx base image
+FROM nginx:latest
 
-# Set the maintainer information
-MAINTAINER adityamoray11111@gmail.com
+# Optional: Set an environment variable to customize the welcome message
+ENV WELCOME_MESSAGE="Welcome to my Nginx server!"
 
-# Install required packages (Apache web server, zip, unzip)
-RUN apt-get update && apt-get install -y apache2 zip unzip
+# Copy a custom configuration file (optional)
+COPY nginx.conf /etc/nginx/nginx.conf
 
-# Add the website ZIP file from the specified URL to the /var/www/html directory
-ADD https://www.free-css.com/assets/files/free-css-templates/download/page254/photogenic.zip /var/www/html/
+# Set a custom welcome message in the Nginx default index.html (optional)
+RUN echo "$WELCOME_MESSAGE" > /usr/share/nginx/html/index.html
 
-# Set the working directory to /var/www/html
-WORKDIR /var/www/html
+# Expose port 80 to make the Nginx web server accessible
+EXPOSE 80
 
-# Unzip the website ZIP file and remove it
-RUN unzip photogenic.zip && rm photogenic.zip
-
-# Expose port 80 for Apache web server
-EXPOSE 80 999 
-
-# Start Apache web server in the foreground
-CMD ["apachectl", "-D", "FOREGROUND"]
+# Start Nginx when the container starts
+CMD ["nginx", "-g", "daemon off;"]
