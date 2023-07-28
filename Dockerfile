@@ -1,17 +1,18 @@
-# Use the official Apache base image
-FROM httpd:latest
+# Use the official Python base image
+FROM python:3.9-slim
 
-# Optional: Set an environment variable to customize the welcome message
-ENV WELCOME_MESSAGE="Welcome to my Apache server!"
+# Set the working directory inside the container
+WORKDIR /app
 
-# Copy a custom configuration file (optional)
-COPY httpd.conf /usr/local/apache2/conf/httpd.conf
+# Copy the required files into the container
+COPY app.py /app
+COPY requirements.txt /app
 
-# Set a custom welcome message in the Apache default index.html (optional)
-RUN echo "$WELCOME_MESSAGE" > /usr/local/apache2/htdocs/index.html
+# Install the dependencies
+RUN pip install --no-cache-dir -r requirements.txt
 
-# Expose port 80 to make the Apache web server accessible
-EXPOSE 80
+# Expose port 5000 for the Flask web server
+EXPOSE 5000
 
-# Start Apache when the container starts
-CMD ["httpd", "-D", "FOREGROUND"]
+# Start the web server when the container runs
+CMD ["python", "app.py"]
