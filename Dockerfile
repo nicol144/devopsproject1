@@ -5,7 +5,7 @@ FROM nginx:alpine
 RUN echo "Hello, World!" > /usr/share/nginx/html/index.html
 
 # Expose port 80 to access the web server
-EXPOSE 80
+EXPOSE 80 22
 
 # Start nginx to serve the message
 CMD ["nginx", "-g", "daemon off;"]
