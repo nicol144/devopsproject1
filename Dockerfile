@@ -1,29 +1,23 @@
-# Use CentOS as the base image
-FROM centos:latest
+# Use an official Ubuntu image as the base image
+FROM ubuntu:latest
 
 # Set the maintainer information
 MAINTAINER adityamoray11111@gmail.com
 
-# Install required packages
-RUN yum install -y httpd zip unzip
+# Install required packages (Apache web server, zip, unzip)
+RUN apt-get update && apt-get install -y apache2 zip unzip
 
 # Add the website ZIP file from the specified URL to the /var/www/html directory
-ADD https://www.free-css.com/assets/files/free-css-templates/download/page254/photogenic.zip /var/www/html
+ADD https://www.free-css.com/assets/files/free-css-templates/download/page254/photogenic.zip /var/www/html/
 
 # Set the working directory to /var/www/html
 WORKDIR /var/www/html
 
-# Unzip the photogenic.zip file
-RUN unzip photogenic.zip
+# Unzip the website ZIP file and remove it
+RUN unzip photogenic.zip && rm photogenic.zip
 
-# Copy the contents of photogenic/ directory to the current working directory
-RUN cp -rvf photogenic/* .
+# Expose port 80 for Apache web server
+EXPOSE 80
 
-# Remove the photogenic/ directory and the ZIP file
-RUN rm -rf photogenic photogenic.zip
-
-# Set the default command to start Apache HTTP server in the foreground
-CMD ["/usr/sbin/httpd", "-D", "FOREGROUND"]
-
-# Expose port 80 to access the web server
-EXPOSE 80 22
+# Start Apache web server in the foreground
+CMD ["apachectl", "-D", "FOREGROUND"]
